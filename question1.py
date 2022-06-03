@@ -1,53 +1,34 @@
+from sys import stdin
 
-from sys import stdin, setrecursionlimit
-import queue
+def isBalance(expression):
+    s = []
+    for i in expression:
+        if i in '({[':
+            s.append(i)
+        elif i is ')':
+            if (not s or s[-1]!='('):
+                return False
+            s.pop()
+        elif i is ']':
+            if (not s or s[-1]!='['):
+                return False
+            s.pop()
+        elif i is '}':
+            if (not s or s[-1]!='{'):
+                return False
+            s.pop()
 
-setrecursionlimit(10 ** 6)
+    if (not s):
+        return True
+    return False
 
-def lengthQ(inputQueue):
-    count = 0
-    while len(inputQueue) != 0:
-        count+=1
-        inputQueue.get()
-    return count
-
-def reverseQueue(inputQueue) :
-    result = []
-    while lengthQ:
-        result.append(inputQueue(lengthQ(inputQueue)))
-        inputQueue.get()
-
-    return result
-
-
-
-    
-    
-
-
-def takeInput():
-    n = int(stdin.readline().strip())
-
-    qu = queue.Queue()
-    values = list(map(int, stdin.readline().strip().split()))
-
-    for i in range(n) :
-        qu.put(values[i])
-
-    return qu
+    return True
 
 
-#main
-t = int(stdin.readline().strip())
 
-while t > 0 :
-    
-    qu = takeInput()
-    reverseQueue(qu)
-    
-    while not qu.empty() :
-        print(qu.get(), end = " ")
-        
-    print()
-    
-    t -= 1
+expression = stdin.readline().strip()
+
+if isBalance(expression):
+    print("true")
+else:
+    print("false")
