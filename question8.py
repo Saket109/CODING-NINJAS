@@ -12,25 +12,28 @@ class BinaryTreeNode:
         self.right = None
 
 
-def countNodesGreaterThanX(root, x) :
-    if root is None:
-        return 0
-    leftcount = countNodesGreaterThanX(root.left,x)
-    rightcount = countNodesGreaterThanX(root.right,x)
-    if root.data>x:
-        return leftcount+rightcount+1
-    else:
-        return leftcount + rightcount
 
+def printNodesWithoutSibling(root) :
+    if root is None:
+        return
+    if root.left is None and root.right is not None:
+        print(root.right.data)
+    if root.right is None and root.left is not None:
+        print(root.left.data)
+    printNodesWithoutSibling(root.left)
+    printNodesWithoutSibling(root.right)
 
 
 #Taking level-order input using fast I/O method
 def takeInput():
     levelOrder = list(map(int, stdin.readline().strip().split(" ")))
     start = 0
-
+    
     length = len(levelOrder)
 
+    if length == 1 :
+        return None
+    
     root = BinaryTreeNode(levelOrder[start])
     start += 1
 
@@ -58,9 +61,8 @@ def takeInput():
 
     return root
 
+	
+
 # Main
 root = takeInput()
-x = int(stdin.readline().strip())
-
-count = countNodesGreaterThanX(root, x)
-print(count)
+printNodesWithoutSibling(root)

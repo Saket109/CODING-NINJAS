@@ -1,34 +1,56 @@
-from sys import stdin
+from sys import stdin, setrecursionlimit
+import queue
 
-def isBalance(expression):
-    s = []
-    for i in expression:
-        if i in '({[':
-            s.append(i)
-        elif i is ')':
-            if (not s or s[-1]!='('):
-                return False
-            s.pop()
-        elif i is ']':
-            if (not s or s[-1]!='['):
-                return False
-            s.pop()
-        elif i is '}':
-            if (not s or s[-1]!='{'):
-                return False
-            s.pop()
+setrecursionlimit(10 ** 6)
 
-    if (not s):
-        return True
-    return False
+#Following the structure used for Binary Tree
+class BinaryTreeNode:
+    def __init__(self, data):
+        self.data = data
+        self.left = None
+        self.right = None
 
-    return True
+def getSum(root):
+    if root is None:
+        return 0
+    leftsum = getSum(root.left)
+    rightsum = getSum(root.right)
+    return leftsum+rightsum+root.data
 
+#Taking level-order input using fast I/O method
+def takeInput():
+    levelOrder = list(map(int, stdin.readline().strip().split(" ")))
+    start = 0
 
+    length = len(levelOrder)
 
-expression = stdin.readline().strip()
+    root = BinaryTreeNode(levelOrder[start])
+    start += 1
 
-if isBalance(expression):
-    print("true")
-else:
-    print("false")
+    q = queue.Queue()
+    q.put(root)
+
+    while not q.empty():
+        currentNode = q.get()
+
+        leftChild = levelOrder[start]
+        start += 1
+
+        if leftChild != -1:
+            leftNode = BinaryTreeNode(leftChild)
+            currentNode.left =leftNode
+            q.put(leftNode)
+
+        rightChild = levelOrder[start]
+        start += 1
+
+        if rightChild != -1:
+            rightNode = BinaryTreeNode(rightChild)
+            currentNode.right =rightNode
+            q.put(rightNode)
+
+    return root
+
+# Main
+root = takeInput()
+print(getSum(root))

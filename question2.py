@@ -1,37 +1,59 @@
+from sys import stdin, setrecursionlimit
+import queue
 
-from sys import stdin
+setrecursionlimit(10 ** 6)
 
-def checkRedundantBrackets(expression) :
-    s = []
-    for char in expression:
-            if char == ')':
-                top = s[-1]
-                s.pop()
 
-                flag = True
+# Following the structure used for Binary Tree
+class BinaryTreeNode:
+    def __init__(self, data):
+        self.data = data
+        self.left = None
+        self.right = None
 
-                while (top!='('):
-                    if top in '/-*+':
-                        flag = False
 
-                    top = s[-1]
-                    s.pop()
+def preOrder(root):
+    if root is None:
+        return 
+    print(root.data,end = " ")
+    preOrder(root.left)
+    preOrder(root.right)
 
-                if flag == True :
-                    return True
 
-            else:
-                s.append(char)
+#Taking level-order input using fast I/O method
+def takeInput():
+    levelOrder = list(map(int, stdin.readline().strip().split(" ")))
+    start = 0
 
-    return False
+    length = len(levelOrder)
 
-    
+    root = BinaryTreeNode(levelOrder[start])
+    start += 1
 
-#main
-expression = stdin.readline().strip()
+    q = queue.Queue()
+    q.put(root)
 
-if checkRedundantBrackets(expression) :
-	print("true")
+    while not q.empty():
+        currentNode = q.get()
 
-else :
-	print("false")
+        leftChild = levelOrder[start]
+        start += 1
+
+        if leftChild != -1:
+            leftNode = BinaryTreeNode(leftChild)
+            currentNode.left =leftNode
+            q.put(leftNode)
+
+        rightChild = levelOrder[start]
+        start += 1
+
+        if rightChild != -1:
+            rightNode = BinaryTreeNode(rightChild)
+            currentNode.right =rightNode
+            q.put(rightNode)
+
+    return root
+
+# Main
+root = takeInput()
+preOrder(root)

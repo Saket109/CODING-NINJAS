@@ -12,15 +12,13 @@ class BinaryTreeNode:
         self.right = None
 
 
-def countNodesGreaterThanX(root, x) :
+def changeToDepthTree(root,k=0) :
     if root is None:
-        return 0
-    leftcount = countNodesGreaterThanX(root.left,x)
-    rightcount = countNodesGreaterThanX(root.right,x)
-    if root.data>x:
-        return leftcount+rightcount+1
-    else:
-        return leftcount + rightcount
+        return
+    root.data = k
+    changeToDepthTree(root.left,k+1)
+    changeToDepthTree(root.right,k+1)
+    return root
 
 
 
@@ -28,9 +26,12 @@ def countNodesGreaterThanX(root, x) :
 def takeInput():
     levelOrder = list(map(int, stdin.readline().strip().split(" ")))
     start = 0
-
+    
     length = len(levelOrder)
 
+    if length == 1 :
+        return None
+    
     root = BinaryTreeNode(levelOrder[start])
     start += 1
 
@@ -58,9 +59,18 @@ def takeInput():
 
     return root
 
+
+def inOrder(root) :
+	if root is None :
+		return 
+
+	inOrder(root.left)
+	print(root.data, end = " ")
+	inOrder(root.right)
+	
+
 # Main
 root = takeInput()
-x = int(stdin.readline().strip())
 
-count = countNodesGreaterThanX(root, x)
-print(count)
+changeToDepthTree(root)
+inOrder(root)
