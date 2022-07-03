@@ -1,60 +1,45 @@
-import queue
-class BinaryTreeNode:
-    def __init__(self, data):
-        self.data = data
-        self.left = None
-        self.right = None
+from sys import stdin
 
-l = []
-def findPathBST(root,data):
-    global l
-    if root==None:
-        return None
-    if root.data == data:
-        l.append(root.data)
-        return l
-    leftoutput = findPathBST(root.left,data)
-    if leftoutput!=None:
-        leftoutput.append(root.data)
-        return leftoutput
-    rightoutput = findPathBST(root.right,data)
-    if rightoutput!= None:
-        rightoutput.append(root.data)
-        return rightoutput
+
+def rotate(arr, n, d):
+    arr.reverse()
+    new_arr1 = arr[:n-d]
+    new_arr1.reverse()
+    new_arr2 = arr[n-d:]
+    new_arr2.reverse()
+    arr = new_arr1+new_arr2
+    return arr
+
+
+
+#Taking Input Using Fats I/O
+def takeInput() :
+    n = int(stdin.readline().rstrip())
+    if n == 0:
+        return list(), 0
+
+    arr = list(map(int, stdin.readline().rstrip().split(" ")))
+    return arr, n
+
+
+#to print the array/list 
+def printList(arr, n) : 
+    for i in range(n) :
+        print(arr[i], end = " ")
+    print()
+
+
+#main
+t = int(stdin.readline().rstrip())
+
+while t > 0 :
+    
+    arr, n = takeInput()
+    d = int(stdin.readline().rstrip())
+    result = rotate(arr, n, d)
+    if n>0:
+        printList(result, n)
     else:
-        return None
-
-
-def buildLevelTree(levelorder):
-    index = 0
-    length = len(levelorder)
-    if length<=0 or levelorder[0]==-1:
-        return None
-    root = BinaryTreeNode(levelorder[index])
-    index += 1
-    q = queue.Queue()
-    q.put(root)
-    while not q.empty():
-        currentNode = q.get()
-        leftChild = levelorder[index]
-        index += 1
-        if leftChild != -1:
-            leftNode = BinaryTreeNode(leftChild)
-            currentNode.left =leftNode
-            q.put(leftNode)
-        rightChild = levelorder[index]
-        index += 1
-        if rightChild != -1:
-            rightNode = BinaryTreeNode(rightChild)
-            currentNode.right =rightNode
-            q.put(rightNode)
-    return root
-
-# Main
-levelOrder = [int(i) for i in input().strip().split()]
-root = buildLevelTree(levelOrder)
-data = int(input())
-path = findPathBST(root,data)
-if path is not None:
-    for ele in path:
-        print(ele,end=' ')
+        print()
+    
+    t -= 1
