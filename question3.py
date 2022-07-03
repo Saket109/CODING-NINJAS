@@ -1,79 +1,67 @@
-from sys import stdin, setrecursionlimit
-import queue
+from sys import stdin
 
-setrecursionlimit(10 ** 6)
-
-
-#Following is the structure used to represent the Binary Tree Node
-class BinaryTreeNode:
-    def __init__(self, data):
+#Following is the Node class already written for the Linked List
+class Node :
+    def __init__(self, data) :
         self.data = data
-        self.left = None
-        self.right = None
+        self.next = None
 
+def swap(prev,curr,future):
+    temp = future.next
+    prev.next = future
+    future.next = curr
+    curr.next = temp
+    return prev
 
-def printLevelWise(root):
-    if root is None:
-        return
-    q = queue.Queue()
-    q.put(root)
-    q.put("null")
-    while(not q.empty()):
-        n = q.get()
-        if n == "null" and not q.empty():
-            print()
-            q.put("null")
-        elif n!="null":
-            print(n.data,end=" ")
-            if n.left is not None:
-                q.put(n.left)
-            if n.right is not None:
-                q.put(n.right)
-        
-        
-
+def bubbleSort(head,realhead) :
     
-                
+    while(head is not None):
+        if head==realhead:
+            temp = head.next
+            head.next = head.next.next
+            temp.next = head
+            return head
+        if head.data>head.next.data:
+            swap(prev,head,head.next)
+        prev = head
+        head = head.next
+    ans = bubbleSort(head,realhead)
 
-#Taking level-order input using fast I/O method
-def takeInput():
-    levelOrder = list(map(int, stdin.readline().strip().split(" ")))
-    start = 0
-    
-    length = len(levelOrder)
+def takeInput() :
+    head = None
+    tail = None
 
-    if length == 1 :
-        return None
-    
-    root = BinaryTreeNode(levelOrder[start])
-    start += 1
+    datas = list(map(int, stdin.readline().rstrip().split(" ")))
 
-    q = queue.Queue()
-    q.put(root)
+    i = 0
+    while (i < len(datas)) and (datas[i] != -1) :
+        data = datas[i]
+        newNode = Node(data)
 
-    while not q.empty():
-        currentNode = q.get()
+        if head is None :
+            head = newNode
+            tail = newNode
 
-        leftChild = levelOrder[start]
-        start += 1
+        else :
+            tail.next = newNode
+            tail = newNode
 
-        if leftChild != -1:
-            leftNode = BinaryTreeNode(leftChild)
-            currentNode.left =leftNode
-            q.put(leftNode)
+        i += 1
 
-        rightChild = levelOrder[start]
-        start += 1
-
-        if rightChild != -1:
-            rightNode = BinaryTreeNode(rightChild)
-            currentNode.right =rightNode
-            q.put(rightNode)
-
-    return root
+    return head
 
 
-# Main
-root = takeInput()
-realroot = root
-printLevelWise(root)
+
+def printLinkedList(head) :
+
+    while head is not None :
+        print(head.data, end = " ")
+        head = head.next
+
+    print()
+
+
+#main
+head = takeInput()
+head = bubbleSort(head)
+printLinkedList(head)

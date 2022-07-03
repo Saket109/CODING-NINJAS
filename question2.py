@@ -1,99 +1,97 @@
-from sys import stdin, setrecursionlimit
-import queue
+from sys import stdin
 
-setrecursionlimit(10 ** 6)
-
-
-#Following is the structure used to represent the Binary Tree Node
-class BinaryTreeNode:
-    def __init__(self, data):
+#Following is the Node class already written for the Linked List
+class Node :
+    def __init__(self, data) :
         self.data = data
-        self.left = None
-        self.right = None
+        self.next = None
 
+def length (head):
+    count = 0
+    while head is not None:
+        count+=1
+        head = head.next
+    return count
 
+def reverse(head):
+    if head is None or head.next is None:
+        return head
+    prev = head
+    curr = head.next
+    temp = curr.next
+    while curr is not None:
+        if prev is head :
+            prev.next = None
+        curr.next = prev
+        prev = curr
+        curr = temp
+        if temp is not None:
+            temp = curr.next
+    return prev,head
 
-#Representation of the Pair Class
-class Pair :
-
-    def __init__(self, minimum, maximum) :
-        self.minimum = minimum
-        self.maximum = maximum
-
-
-
-def getMinAndMax(root) :
-    if root is None:
-        return 1000,-1000
-    lmin,lmax = getMinAndMax(root.left)
-    rmin,rmax = getMinAndMax(root.right)
-    return min(lmin,rmin,root.data),max(lmax,rmax,root.data)
-
-
-#Taking level-order input using fast I/O method
-def takeInput():
-    levelOrder = list(map(int, stdin.readline().strip().split(" ")))
-    start = 0
-    
-    length = len(levelOrder)
-
-    if length == 1 :
+def kReverse(head, k):
+    if head is None:
         return None
+    h1 = head
+    t1 = head
+    count = 1
+    while count!=k and head.next is not None:
+        t1 = head.next
+        head = head.next
+        count+=1
+    h2 = t1.next
+    t1.next = None
+    h,t = reverse(h1)
+    recursive_head = kReverse(h2,k)
+    t.next = recursive_head
+    return h
+
+
+#Taking Input Using Fast I/O
+def takeInput() :
+    head = None
+    tail = None
+
+    datas = list(map(int, stdin.readline().rstrip().split(" ")))
+
+    i = 0
+    while (i < len(datas)) and (datas[i] != -1) :
+        data = datas[i]
+        newNode = Node(data)
+
+        if head is None :
+            head = newNode
+            tail = newNode
+
+        else :
+            tail.next = newNode
+            tail = newNode
+
+        i += 1
+
+    return head
+
+
+
+
+def printLinkedList(head) :
+
+    while head is not None :
+        print(head.data, end = " ")
+        head = head.next
+
+    print()
+
+
+#main
+t = int(stdin.readline().rstrip())
+
+while t > 0 :
     
-    root = BinaryTreeNode(levelOrder[start])
-    start += 1
+    head = takeInput()
+    k = int(stdin.readline().strip())
 
-    q = queue.Queue()
-    q.put(root)
+    newHead = kReverse(head, k)
+    printLinkedList(newHead)
 
-    while not q.empty():
-        currentNode = q.get()
-
-        leftChild = levelOrder[start]
-        start += 1
-
-        if leftChild != -1:
-            leftNode = BinaryTreeNode(leftChild)
-            currentNode.left =leftNode
-            q.put(leftNode)
-
-        rightChild = levelOrder[start]
-        start += 1
-
-        if rightChild != -1:
-            rightNode = BinaryTreeNode(rightChild)
-            currentNode.right =rightNode
-            q.put(rightNode)
-
-    return root
-
-    
-def printLevelWise(root):
-    if root is None:
-        return
-
-    inputQ = queue.Queue()
-    outputQ = queue.Queue()
-    inputQ.put(root)
-
-    while not inputQ.empty():
-       
-        while not inputQ.empty():
-       
-            curr = inputQ.get()
-            print(curr.data, end=' ')
-            if curr.left!=None:
-                outputQ.put(curr.left)
-            if curr.right!=None:
-                outputQ.put(curr.right)
-       
-        print()
-        inputQ, outputQ = outputQ, inputQ
-
-
-# Main
-root = takeInput()
-
-minimum,maximum = getMinAndMax(root)
-pair = Pair(minimum,maximum)
-print(str(str(pair.minimum) + " " + str(pair.maximum)))
+    t -= 1

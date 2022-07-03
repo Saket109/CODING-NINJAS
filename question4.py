@@ -1,96 +1,60 @@
-from sys import stdin, setrecursionlimit
 import queue
-
-setrecursionlimit(10 ** 6)
-
-
-#Following is the structure used to represent the Binary Tree Node
 class BinaryTreeNode:
     def __init__(self, data):
         self.data = data
         self.left = None
         self.right = None
 
-
-
-def rootToLeafPathsSumToK(root, k,result):
-    if root is None:
-        return
-    result = result + str(root.data) + " "
-    if root.data == k:
-        if root.left is None and root.right is None:
-            print(result) 
-    rootToLeafPathsSumToK(root.left, k-root.data,result)
-    rootToLeafPathsSumToK(root.right, k-root.data,result)
-    return
-
-
-
-
-
-
-#Taking level-order input using fast I/O method
-def takeInput():
-    levelOrder = list(map(int, stdin.readline().strip().split(" ")))
-    start = 0
-    
-    length = len(levelOrder)
-
-    if length == 1 :
+l = []
+def findPathBST(root,data):
+    global l
+    if root==None:
         return None
-    
-    root = BinaryTreeNode(levelOrder[start])
-    start += 1
+    if root.data == data:
+        l.append(root.data)
+        return l
+    leftoutput = findPathBST(root.left,data)
+    if leftoutput!=None:
+        leftoutput.append(root.data)
+        return leftoutput
+    rightoutput = findPathBST(root.right,data)
+    if rightoutput!= None:
+        rightoutput.append(root.data)
+        return rightoutput
+    else:
+        return None
 
+
+def buildLevelTree(levelorder):
+    index = 0
+    length = len(levelorder)
+    if length<=0 or levelorder[0]==-1:
+        return None
+    root = BinaryTreeNode(levelorder[index])
+    index += 1
     q = queue.Queue()
     q.put(root)
-
     while not q.empty():
         currentNode = q.get()
-
-        leftChild = levelOrder[start]
-        start += 1
-
+        leftChild = levelorder[index]
+        index += 1
         if leftChild != -1:
             leftNode = BinaryTreeNode(leftChild)
             currentNode.left =leftNode
             q.put(leftNode)
-
-        rightChild = levelOrder[start]
-        start += 1
-
+        rightChild = levelorder[index]
+        index += 1
         if rightChild != -1:
             rightNode = BinaryTreeNode(rightChild)
             currentNode.right =rightNode
             q.put(rightNode)
-
     return root
 
-    
-def printLevelWise(root):
-    if root is None:
-        return
-
-    inputQ = queue.Queue()
-    outputQ = queue.Queue()
-    inputQ.put(root)
-
-    while not inputQ.empty():
-       
-        while not inputQ.empty():
-       
-            curr = inputQ.get()
-            print(curr.data, end=' ')
-            if curr.left!=None:
-                outputQ.put(curr.left)
-            if curr.right!=None:
-                outputQ.put(curr.right)
-       
-        print()
-        inputQ, outputQ = outputQ, inputQ
-
-
 # Main
-root = takeInput()
-k = int(stdin.readline().strip())
-rootToLeafPathsSumToK(root, k, "")
+levelOrder = [int(i) for i in input().strip().split()]
+root = buildLevelTree(levelOrder)
+data = int(input())
+path = findPathBST(root,data)
+if path is not None:
+    for ele in path:
+        print(ele,end=' ')

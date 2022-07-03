@@ -1,56 +1,121 @@
 from sys import stdin, setrecursionlimit
-import queue
-
 setrecursionlimit(10 ** 6)
 
-#Following the structure used for Binary Tree
-class BinaryTreeNode:
-    def __init__(self, data):
+#Following is the Node class already written for the Linked List
+class Node :
+    def __init__(self, data) :
         self.data = data
-        self.left = None
-        self.right = None
+        self.next = None
 
-def getSum(root):
-    if root is None:
-        return 0
-    leftsum = getSum(root.left)
-    rightsum = getSum(root.right)
-    return leftsum+rightsum+root.data
+def mergeTwoSortedLinkedLists(head1, head2):
+    fh = None
+    ft = None
+    while head1 is not None and head2 is not None:
+        if head1.data<head2.data:
+            if fh is None and ft is None:
+                fh = head1
+                ft = head1
+            else:
+                ft.next = head1
+                ft = ft.next
+            head1 = head1.next
 
-#Taking level-order input using fast I/O method
-def takeInput():
-    levelOrder = list(map(int, stdin.readline().strip().split(" ")))
-    start = 0
+        else:
+            if fh is None and ft is None:
+                fh = head2
+                ft = head2  
+            else:          
+                ft.next = head2
+                ft = ft.next
+            head2 = head2.next
+    while head1 is not None:
+        if fh is None and ft is None:
+            fh = head1
+            ft = head1
+        else:
+            ft.next = head1
+            ft = ft.next
+        head1 = head1.next
+    while head2 is not None:
+        if fh is None and ft is None:
+            fh = head1
+            ft = head1
+        else:
+            ft.next = head2
+            ft = ft.next 
+        head2 = head2.next
 
-    length = len(levelOrder)
+    return fh           
 
-    root = BinaryTreeNode(levelOrder[start])
-    start += 1
+def lengthll(head):
+    count = 0
+    while(head is not None):
+        count+=1
+        head = head.next
+    return count
 
-    q = queue.Queue()
-    q.put(root)
+def mergeSort(head):
+    if head is None:
+        return head
+    if head.next is None:
+        return head
+    height = lengthll(head)
+    head1 = head
+    mid = head
+    midpoint = (height+1)//2
+    for _ in range(1,midpoint):
+        mid = head.next
+        head = head.next
+    head2 = mid.next
+    mid.next = None
+    leftpart = mergeSort(head1)
+    rightpart = mergeSort(head2)
+    required = mergeTwoSortedLinkedLists(leftpart,rightpart)
+    return required
 
-    while not q.empty():
-        currentNode = q.get()
 
-        leftChild = levelOrder[start]
-        start += 1
+#Taking Input Using Fast I/O
+def takeInput() :
+    head = None
+    tail = None
 
-        if leftChild != -1:
-            leftNode = BinaryTreeNode(leftChild)
-            currentNode.left =leftNode
-            q.put(leftNode)
+    datas = list(map(int, stdin.readline().rstrip().split(" ")))
 
-        rightChild = levelOrder[start]
-        start += 1
+    i = 0
+    while (i < len(datas)) and (datas[i] != -1) :
+        data = datas[i]
+        newNode = Node(data)
 
-        if rightChild != -1:
-            rightNode = BinaryTreeNode(rightChild)
-            currentNode.right =rightNode
-            q.put(rightNode)
+        if head is None :
+            head = newNode
+            tail = newNode
 
-    return root
+        else :
+            tail.next = newNode
+            tail = newNode
 
-# Main
-root = takeInput()
-print(getSum(root))
+        i += 1
+
+    return head
+
+
+def printLinkedList(head) :
+
+    while head is not None :
+        print(head.data, end = " ")
+        head = head.next
+
+    print()
+
+
+#main
+t = int(stdin.readline().rstrip())
+
+while t > 0 :
+    
+    head = takeInput()
+
+    newHead = mergeSort(head)
+    printLinkedList(newHead)
+
+    t -= 1
