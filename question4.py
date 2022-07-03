@@ -12,15 +12,20 @@ class BinaryTreeNode:
         self.right = None
 
 
-def countNodesGreaterThanX(root, x) :
+
+def rootToLeafPathsSumToK(root, k,result):
     if root is None:
-        return 0
-    leftcount = countNodesGreaterThanX(root.left,x)
-    rightcount = countNodesGreaterThanX(root.right,x)
-    if root.data>x:
-        return leftcount+rightcount+1
-    else:
-        return leftcount + rightcount
+        return
+    result = result + str(root.data) + " "
+    if root.data == k:
+        if root.left is None and root.right is None:
+            print(result) 
+    rootToLeafPathsSumToK(root.left, k-root.data,result)
+    rootToLeafPathsSumToK(root.right, k-root.data,result)
+    return
+
+
+
 
 
 
@@ -28,9 +33,12 @@ def countNodesGreaterThanX(root, x) :
 def takeInput():
     levelOrder = list(map(int, stdin.readline().strip().split(" ")))
     start = 0
-
+    
     length = len(levelOrder)
 
+    if length == 1 :
+        return None
+    
     root = BinaryTreeNode(levelOrder[start])
     start += 1
 
@@ -58,9 +66,31 @@ def takeInput():
 
     return root
 
+    
+def printLevelWise(root):
+    if root is None:
+        return
+
+    inputQ = queue.Queue()
+    outputQ = queue.Queue()
+    inputQ.put(root)
+
+    while not inputQ.empty():
+       
+        while not inputQ.empty():
+       
+            curr = inputQ.get()
+            print(curr.data, end=' ')
+            if curr.left!=None:
+                outputQ.put(curr.left)
+            if curr.right!=None:
+                outputQ.put(curr.right)
+       
+        print()
+        inputQ, outputQ = outputQ, inputQ
+
+
 # Main
 root = takeInput()
-x = int(stdin.readline().strip())
-
-count = countNodesGreaterThanX(root, x)
-print(count)
+k = int(stdin.readline().strip())
+rootToLeafPathsSumToK(root, k, "")

@@ -13,21 +13,15 @@ class BinaryTreeNode:
 
 
 
-#Representation of the Pair Class
-class Pair :
 
-    def __init__(self, minimum, maximum) :
-        self.minimum = minimum
-        self.maximum = maximum
-
-
-
-def getMinAndMax(root) :
+def mirrorBinaryTree(root) :
     if root is None:
-        return 1000,-1000
-    lmin,lmax = getMinAndMax(root.left)
-    rmin,rmax = getMinAndMax(root.right)
-    return min(lmin,rmin,root.data),max(lmax,rmax,root.data)
+        return None
+    leftchild = mirrorBinaryTree(root.left)
+    rightchild = mirrorBinaryTree(root.right)
+    root.right = leftchild
+    root.left = rightchild
+    return root
 
 
 #Taking level-order input using fast I/O method
@@ -67,9 +61,9 @@ def takeInput():
 
     return root
 
-    
+	
 def printLevelWise(root):
-    if root is None:
+    if root==None:
         return
 
     inputQ = queue.Queue()
@@ -94,6 +88,5 @@ def printLevelWise(root):
 # Main
 root = takeInput()
 
-minimum,maximum = getMinAndMax(root)
-pair = Pair(minimum,maximum)
-print(str(str(pair.minimum) + " " + str(pair.maximum)))
+mirrorBinaryTree(root)
+printLevelWise(root)

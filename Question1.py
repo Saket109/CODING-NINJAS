@@ -1,7 +1,7 @@
 from sys import stdin, setrecursionlimit
 import queue
 
-setrecursionlimit(10 ** 6)
+setrecursionlimit(10 ** 4)
 
 
 #Following is the structure used to represent the Binary Tree Node
@@ -12,22 +12,15 @@ class BinaryTreeNode:
         self.right = None
 
 
-
-#Representation of the Pair Class
-class Pair :
-
-    def __init__(self, minimum, maximum) :
-        self.minimum = minimum
-        self.maximum = maximum
-
-
-
-def getMinAndMax(root) :
+def insertDuplicateNode(root):
     if root is None:
-        return 1000,-1000
-    lmin,lmax = getMinAndMax(root.left)
-    rmin,rmax = getMinAndMax(root.right)
-    return min(lmin,rmin,root.data),max(lmax,rmax,root.data)
+        return 
+    save = root.left
+    duplicate = BinaryTreeNode(root.data)
+    root.left = duplicate
+    duplicate.left = save
+    insertDuplicateNode(root.left.left)
+    insertDuplicateNode(root.right)
 
 
 #Taking level-order input using fast I/O method
@@ -94,6 +87,5 @@ def printLevelWise(root):
 # Main
 root = takeInput()
 
-minimum,maximum = getMinAndMax(root)
-pair = Pair(minimum,maximum)
-print(str(str(pair.minimum) + " " + str(pair.maximum)))
+insertDuplicateNode(root)
+printLevelWise(root)

@@ -11,25 +11,30 @@ class BinaryTreeNode:
         self.left = None
         self.right = None
 
+q=[]
 
-
-#Representation of the Pair Class
-class Pair :
-
-    def __init__(self, minimum, maximum) :
-        self.minimum = minimum
-        self.maximum = maximum
-
-
-
-def getMinAndMax(root) :
+def printLevelWise(root):
     if root is None:
-        return 1000,-1000
-    lmin,lmax = getMinAndMax(root.left)
-    rmin,rmax = getMinAndMax(root.right)
-    return min(lmin,rmin,root.data),max(lmax,rmax,root.data)
+        return
+    print(root.data,end=':')
+    if root.left is not None:
+        print(f"L:{root.left.data}",end=',')
+    else:
+        print(f"L:{-1}",end=',')
+    if root.right is not None:
+        print(f"R:{root.right.data}")
+    else:
+        print(f"R:{-1}")
 
+    if root.left is not None:
+        q.append(root.left)
+    if root.right is not None:
+        q.append(root.right) 
 
+    while(len(q)!=0):
+        root = q.pop(0)
+        printLevelWise(root)
+        
 #Taking level-order input using fast I/O method
 def takeInput():
     levelOrder = list(map(int, stdin.readline().strip().split(" ")))
@@ -67,33 +72,7 @@ def takeInput():
 
     return root
 
-    
-def printLevelWise(root):
-    if root is None:
-        return
-
-    inputQ = queue.Queue()
-    outputQ = queue.Queue()
-    inputQ.put(root)
-
-    while not inputQ.empty():
-       
-        while not inputQ.empty():
-       
-            curr = inputQ.get()
-            print(curr.data, end=' ')
-            if curr.left!=None:
-                outputQ.put(curr.left)
-            if curr.right!=None:
-                outputQ.put(curr.right)
-       
-        print()
-        inputQ, outputQ = outputQ, inputQ
-
 
 # Main
 root = takeInput()
-
-minimum,maximum = getMinAndMax(root)
-pair = Pair(minimum,maximum)
-print(str(str(pair.minimum) + " " + str(pair.maximum)))
+printLevelWise(root)
