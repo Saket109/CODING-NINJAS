@@ -1,36 +1,39 @@
-# Defining a dictionary 
-    # d = dict([("saket","btech"),("neha","ba"),("vandana","msc")])
+# ABOUT HASHMAPS : hashmaps are like dictionary   where we will use the key,value pairs
 
-# Loop in dictionary :
-    # for i in d:
-    #     print(i,d[i])
+    # For storing keys,values we will use bucket array
+    # keys -> hashfunction -> integer(index)
+    # Hashfunction has two things  : 
+                            # 1.) Hashcode
+                            # 2.) Compression function
 
-# ANOTHER METHODS :
-d = {"saket":"btech","neha":"ba","vandana":"msc"}
-    # print(d["vandana"])
+            # Compression function will compress the hashcode value within the bucket array size
 
-    #c = d.copy()
-    #print(c["saket"])
+        # So the compression function is (hashcode) % bucketsize
+        
+# Hashcode : for key integers we will can take hashcode as same integer
+    # for key strings we can take ascii value of every char value with respect to p
+    # like 10^2(ascii of c)+10^1(ascii of b)+10^0(ascii of a) for "abc"
 
-# MORE THINGS :
-    # if "saket" in d:
-    #     print("True")
-    # else: 
-    #     print("false")
+    # But there is one problem called collision handling during compression function :
+        # if we have 105 and 205 and bucket size is 20 then for both ()%size is same
+    
+    # IN PYTHON WE ALSO HAVE A INBUILT FUNCTION CALLED HASH() FOR GENERATING HASHCODE
 
-    # print(d.get("neha",10))
-    # print(d.get("hello",10))
+    # Collision Handling  : we have 2 solutions :
+            # 1.) closed hashing : using linked list or we can say by adding multiple integers to same index
+            # 2.) open addressing : hi(a) = hf(a)+f(i) 
+                # > linear probing : f(i) = i  -> f(0)=0
+                # > quadratic probing : f(i) = i^2 -> f(0)=0 Also better solution
+                # > doubling hashing : f(i) = i*hf'(i) -> f(0)=0
 
-# DELETING ELEMENTS :
-    # d.pop("neha")
-    # del d["vandana"]
-    # print(d)
+# But the best method for hashcode is closed hashing
 
-    # d.clear()  -> {}
-    # del d   ->  d is completely destroyed
+# Now we will learn to access and insert in the hashmaps  :  
+    # class map : buckets,bucket size,count
+    # class mapnode : key,value,next
 
-# ADDING ELEMENTS : 
-    # d["hello"] = 100
-
-
+# we will do following things : 
+     # insert(key,value)
+     # delete(key)
+     # search(key) -> return value
 
