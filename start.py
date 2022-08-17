@@ -1,16 +1,36 @@
-class book:
-    def __init__(self,pageno,price,name):
-        self.pagenumber = pageno
-        self.rate = price
-        self.name = name
-    
-    def show(self,author):
-        print("pages are ",self.pagenumber)
-        print("price is ",self.rate)
-        print("name is ",self.name)
-        print("author is ",author)
+# Defining a dictionary 
+    # d = dict([("saket","btech"),("neha","ba"),("vandana","msc")])
+
+# Loop in dictionary :
+    # for i in d:
+    #     print(i,d[i])
+
+# ANOTHER METHODS :
+d = {"saket":"btech","neha":"ba","vandana":"msc"}
+    # print(d["vandana"])
+
+    #c = d.copy()
+    #print(c["saket"])
+
+# MORE THINGS :
+    # if "saket" in d:
+    #     print("True")
+    # else: 
+    #     print("false")
+
+    # print(d.get("neha",10))
+    # print(d.get("hello",10))
+
+# DELETING ELEMENTS :
+    # d.pop("neha")
+    # del d["vandana"]
+    # print(d)
+
+    # d.clear()  -> {}
+    # del d   ->  d is completely destroyed
+
+# ADDING ELEMENTS : 
+    # d["hello"] = 100
 
 
 
-v = book(250,800,"hello again")
-v.show("bengali")
