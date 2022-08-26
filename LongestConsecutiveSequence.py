@@ -33,7 +33,7 @@ def longestConsecutiveSubsequence(arr,n):
                 d[j+1]=False
                 j+=1
                 if length == maxlength:
-                    ans = first(arr,end-maxlength+1,j+2-maxlength)
+                    ans = first(arr,end-maxlength+1,j+1-maxlength)
                     end = ans+maxlength-1
             j=i
             while (j-1) in d:
